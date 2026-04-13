@@ -1,0 +1,82 @@
+/* src/styles.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-primary text-dark-4 font-sans;
+  }
+  
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-dark-6 rounded;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-dark-5 rounded hover:bg-dark-4 transition-colors;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-dark-1 hover:bg-dark-2 text-white font-semibold py-2.5 px-5 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg;
+  }
+  
+  .btn-secondary {
+    @apply bg-dark-6 hover:bg-dark-5 text-dark-2 font-medium py-2.5 px-5 rounded-xl transition-all duration-200;
+  }
+  
+  .btn-outline {
+    @apply border-2 border-dark-3 text-dark-2 hover:bg-dark-1 hover:text-white font-medium py-2 px-4 rounded-lg transition-all duration-200;
+  }
+  
+  .btn-danger {
+    @apply bg-danger/10 hover:bg-danger text-danger hover:text-white font-medium py-2 px-4 rounded-lg transition-all duration-200;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-2.5 bg-white border-2 border-dark-6 rounded-xl focus:outline-none focus:ring-2 focus:ring-dark-1 focus:border-transparent text-dark-2 placeholder-dark-5/50 transition-all duration-200;
+  }
+  
+  .card {
+    @apply bg-white rounded-2xl shadow-lg border border-dark-6/30;
+  }
+  
+  .stat-card {
+    @apply bg-white rounded-2xl shadow-lg p-6 border-l-4 border-dark-1 hover:shadow-xl transition-all duration-300;
+  }
+  
+  .table-header {
+    @apply px-6 py-4 text-left text-xs font-semibold text-dark-5 uppercase tracking-wider bg-dark-6/20;
+  }
+  
+  .table-cell {
+    @apply px-6 py-4 text-sm text-dark-4 border-b border-dark-6/20;
+  }
+  
+  .badge {
+    @apply px-2 py-1 rounded-lg text-xs font-medium;
+  }
+  
+  .badge-primary {
+    @apply bg-dark-1/10 text-dark-1;
+  }
+  
+  .badge-success {
+    @apply bg-success/10 text-success;
+  }
+  
+  .badge-warning {
+    @apply bg-warning/10 text-warning;
+  }
+  
+  .badge-danger {
+    @apply bg-danger/10 text-danger;
+  }
+}

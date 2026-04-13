@@ -1,0 +1,21 @@
+{
+  "name": "dsa-tracker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "backend": "cd backend && npm run dev",
+    "frontend": "cd frontend && ng serve",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "prisma": "^7.7.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.7.0"
+  }
+}
