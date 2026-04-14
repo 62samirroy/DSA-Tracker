@@ -9,53 +9,80 @@ import logsRoutes from './routes/logs.routes';
 import mocksRoutes from './routes/mocks.routes';
 import contestsRoutes from './routes/contests.routes';
 import roadmapRoutes from './routes/roadmap.routes';
-import aiPlanRoutes from "./routes/ai-plan.routes";
+import practiceRoutes from './routes/ai-plan.routes';
+import aiPlanRoutes from './routes/ai-plan.routes';
 
+// Load environment variables
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Configure CORS properly
+// CORS configuration
+const allowedOrigins = [
+    'http://localhost:4200',
+    'https://your-frontend.vercel.app',
+    process.env.FRONTEND_URL
+].filter(Boolean);
+
 app.use(cors({
-    origin: ['http://localhost:4200', 'http://localhost:3000'],
+    origin: allowedOrigins,
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
 }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.json({
+        status: 'ok',
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV,
+        database: AppDataSource.isInitialized ? 'connected' : 'disconnected'
+    });
+});
+
+// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/logs', logsRoutes);
 app.use('/api/mocks', mocksRoutes);
 app.use('/api/contests', contestsRoutes);
 app.use('/api/roadmap', roadmapRoutes);
+app.use('/api/practice', practiceRoutes);
 app.use('/api/ai-plan', aiPlanRoutes);
 
-// Health check
-app.get('/health', (req, res) => {
-    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+// 404 handler
+app.use((req, res) => {
+    res.status(404).json({ error: 'Route not found' });
 });
 
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-    console.error(err.stack);
-    res.status(500).json({ error: 'Something went wrong!' });
+    console.error('Error:', err.stack);
+    res.status(500).json({
+        error: 'Something went wrong!',
+        message: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
 });
 
 // Initialize database and start server
-AppDataSource.initialize()
-    .then(() => {
+const startServer = async () => {
+    try {
+        await AppDataSource.initialize();
         console.log('✅ PostgreSQL connected successfully!');
+
         app.listen(PORT, () => {
             console.log(`🚀 Server running on port ${PORT}`);
             console.log(`📍 Health check: http://localhost:${PORT}/health`);
+            console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
         });
-    })
-    .catch((error) => {
+    } catch (error) {
         console.error('❌ Error connecting to PostgreSQL:', error);
         process.exit(1);
-    });
+    }
+};
+
+startServer();
