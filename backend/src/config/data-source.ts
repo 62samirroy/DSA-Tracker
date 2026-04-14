@@ -25,7 +25,17 @@ export const AppDataSource = new DataSource({
     ssl: {
         rejectUnauthorized: false,
     },
-    entities: ["dist/**/*.entity.js"],
+    entities: [
+        User,
+        StudyLog,
+        MockSession,
+        Contest,
+        RoadmapWeek,
+        PracticeSession,
+        QuestionCheck,
+        PracticePlan,
+        PracticeTask
+    ],
     migrations: ["dist/migrations/*.js"],
-    synchronize: false,
+    synchronize: true, // Set to false in production and use migrations instead
 });
