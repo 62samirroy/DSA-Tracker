@@ -4,9 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --configuration production",
+    "build-prod": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "vercel-build": "ng build --configuration production"
   },
   "private": true,
   "packageManager": "npm@10.8.2",
@@ -24,6 +26,7 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
+    "@angular-devkit/build-angular": "^21.2.7",
     "@angular/build": "^21.2.6",
     "@angular/cdk": "^21.2.5",
     "@angular/cli": "^21.2.6",

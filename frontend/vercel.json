@@ -1,0 +1,36 @@
+// frontend/vercel.json
+{
+    "version": 2,
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist/frontend/browser",
+    "framework": "angular",
+    "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
+        }
+    ],
+    "env": {
+        "NODE_VERSION": "20",
+        "NG_BUILD_OPTIMIZATION": "true"
+    },
+    "headers": [
+        {
+            "source": "/(.*)",
+            "headers": [
+                {
+                    "key": "X-Content-Type-Options",
+                    "value": "nosniff"
+                },
+                {
+                    "key": "X-Frame-Options",
+                    "value": "DENY"
+                },
+                {
+                    "key": "X-XSS-Protection",
+                    "value": "1; mode=block"
+                }
+            ]
+        }
+    ]
+}

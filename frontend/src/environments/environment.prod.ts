@@ -1,5 +1,4 @@
-// src/environments/environment.prod.ts
 export const environment = {
     production: true,
-    apiUrl: 'https://your-backend.railway.app/api'
+    apiUrl: 'https://dsa-tracker.up.railway.app/api'
 };
