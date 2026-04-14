@@ -21,20 +21,11 @@ console.log(`Running in ${isProduction ? 'production' : 'development'} mode`);
 
 export const AppDataSource = new DataSource({
     type: "postgres",
-    ...(process.env.DATABASE_URL
-        ? {
-            url: process.env.DATABASE_URL,
-            ssl: { rejectUnauthorized: false }
-        }
-        : {
-            host: process.env.DB_HOST || "localhost",
-            port: parseInt(process.env.DB_PORT || "5432"),
-            username: process.env.DB_USERNAME || "postgres",
-            password: process.env.DB_PASSWORD || "postgres",
-            database: process.env.DB_NAME || "dsa_tracker",
-        }
-    ),
+    url: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false,
+    },
+    entities: ["dist/**/*.entity.js"],
+    migrations: ["dist/migrations/*.js"],
     synchronize: false,
-    logging: true,
-    entities: [User, StudyLog, MockSession, Contest, RoadmapWeek, PracticeSession, QuestionCheck, PracticePlan, PracticeTask],
 });
