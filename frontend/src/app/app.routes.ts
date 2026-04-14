@@ -63,5 +63,16 @@ export const routes: Routes = [
             }
         ]
     },
+    {
+        path: 'ai-plan',
+        canActivate: [authGuard],
+        loadComponent: () => import('./features/dashboard/shell/shell').then(m => m.ShellComponent),
+        children: [
+            {
+                path: '',
+                loadComponent: () => import('./features/ai-plan/ai-plan').then(m => m.AiPlanComponent)
+            }
+        ]
+    },
     { path: '**', redirectTo: '/dashboard' }
 ];

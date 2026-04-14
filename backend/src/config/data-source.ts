@@ -1,4 +1,4 @@
-// src/config/data-source.ts
+// backend/src/config/data-source.ts
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { User } from "../entities/User";
@@ -6,6 +6,10 @@ import { StudyLog } from "../entities/StudyLog";
 import { MockSession } from "../entities/MockSession";
 import { Contest } from "../entities/Contest";
 import { RoadmapWeek } from "../entities/RoadmapWeek";
+import { PracticeSession } from "../entities/PracticeSession";
+import { QuestionCheck } from "../entities/QuestionCheck";
+import { PracticePlan } from "../entities/PracticePlan";
+import { PracticeTask } from "../entities/PracticeTask";
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -19,7 +23,7 @@ export const AppDataSource = new DataSource({
     database: process.env.DB_NAME || "dsa_tracker",
     synchronize: true,
     logging: true,
-    entities: [User, StudyLog, MockSession, Contest, RoadmapWeek],
+    entities: [User, StudyLog, MockSession, Contest, RoadmapWeek, PracticeSession, QuestionCheck, PracticePlan, PracticeTask],
     migrations: [],
     subscribers: [],
 });

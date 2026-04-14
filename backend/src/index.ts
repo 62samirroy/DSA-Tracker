@@ -9,6 +9,7 @@ import logsRoutes from './routes/logs.routes';
 import mocksRoutes from './routes/mocks.routes';
 import contestsRoutes from './routes/contests.routes';
 import roadmapRoutes from './routes/roadmap.routes';
+import aiPlanRoutes from "./routes/ai-plan.routes";
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ app.use('/api/logs', logsRoutes);
 app.use('/api/mocks', mocksRoutes);
 app.use('/api/contests', contestsRoutes);
 app.use('/api/roadmap', roadmapRoutes);
+app.use('/api/ai-plan', aiPlanRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

@@ -95,7 +95,8 @@ export class ShellComponent {
     { path: '/logs', label: 'Study Logs', shortLabel: 'Logs', icon: '📝' },
     { path: '/roadmap', label: 'Roadmap', shortLabel: 'Plan', icon: '🗺️' },
     { path: '/mocks', label: 'Mock Interviews', shortLabel: 'Mock', icon: '🎯' },
-    { path: '/contests', label: 'Contests', shortLabel: 'Contest', icon: '🏆' }
+    { path: '/contests', label: 'Contests', shortLabel: 'Contest', icon: '🏆' },
+    { path: '/ai-plan', label: 'AI Plan', shortLabel: 'AI', icon: 'brain' }
   ];
 
   constructor(public authService: AuthService) { }
