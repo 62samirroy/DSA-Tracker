@@ -12,18 +12,32 @@ import { PracticePlan } from "../entities/PracticePlan";
 import { PracticeTask } from "../entities/PracticeTask";
 import dotenv from 'dotenv';
 
+// Load environment variables
 dotenv.config();
+
+const isProduction = process.env.NODE_ENV === 'production';
+
+console.log(`Running in ${isProduction ? 'production' : 'development'} mode`);
 
 export const AppDataSource = new DataSource({
     type: "postgres",
-    host: process.env.DB_HOST || "localhost",
-    port: parseInt(process.env.DB_PORT || "5432"),
-    username: process.env.DB_USERNAME || "postgres",
-    password: process.env.DB_PASSWORD || "postgres",
-    database: process.env.DB_NAME || "dsa_tracker",
-    synchronize: true,
-    logging: true,
+    ...(isProduction
+        ? {
+            url: process.env.DATABASE_URL,
+            ssl: { rejectUnauthorized: false }  // Required for Railway
+        }
+        : {
+            host: process.env.DB_HOST || "localhost",
+            port: parseInt(process.env.DB_PORT || "5432"),
+            username: process.env.DB_USERNAME || "postgres",
+            password: process.env.DB_PASSWORD || "postgres",
+            database: process.env.DB_NAME || "dsa_tracker",
+        }
+    ),
+    synchronize: false,  // Never true in production
+    logging: !isProduction,
     entities: [User, StudyLog, MockSession, Contest, RoadmapWeek, PracticeSession, QuestionCheck, PracticePlan, PracticeTask],
-    migrations: [],
+    migrations: ["src/migrations/*.ts"],
     subscribers: [],
+    ...(isProduction && { ssl: { rejectUnauthorized: false } })
 });

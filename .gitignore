@@ -30,3 +30,12 @@ out/
 # Misc
 .cache/
 *.log
+
+# Production - Railway will provide these
+NODE_ENV=production
+PORT=3000
+JWT_SECRET=your-strong-production-secret-key-change-this
+FRONTEND_URL=https://your-frontend.vercel.app
+
+# Railway will automatically provide DATABASE_URL
+# Don't set DB_HOST manually in Railway
