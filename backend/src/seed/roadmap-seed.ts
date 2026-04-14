@@ -4,9 +4,7 @@ import { RoadmapWeek } from '../entities/RoadmapWeek';
 import { User } from '../entities/User';
 import dotenv from 'dotenv';
 
-if (process.env.NODE_ENV !== 'production') {
-    dotenv.config();
-}
+dotenv.config();
 
 const roadmapData = [
     // PHASE 1 — GFG DSA Course

@@ -76,8 +76,6 @@ const startServer = async () => {
     try {
         await AppDataSource.initialize();
         console.log('✅ PostgreSQL connected successfully!');
-        console.log("DATABASE_URL =", process.env.DATABASE_URL);
-        console.log("DB_HOST =", process.env.DB_HOST);
     } catch (error) {
         console.error('❌ DB connection failed:', error);
     }
