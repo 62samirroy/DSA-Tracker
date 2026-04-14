@@ -8,6 +8,7 @@ import { PracticePlan } from '../entities/PracticePlan';
 import { PracticeTask } from '../entities/PracticeTask';
 import { QUESTION_BANK, normalizeTopic } from '../constants/question-bank';
 
+
 export const generatePlan = async (req: AuthRequest, res: Response) => {
     try {
         const studyLogRepository = AppDataSource.getRepository(StudyLog);
