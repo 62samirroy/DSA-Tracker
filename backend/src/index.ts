@@ -73,16 +73,15 @@ const startServer = async () => {
     try {
         await AppDataSource.initialize();
         console.log('✅ PostgreSQL connected successfully!');
-
-        app.listen(PORT, () => {
-            console.log(`🚀 Server running on port ${PORT}`);
-            console.log(`📍 Health check: http://localhost:${PORT}/health`);
-            console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-        });
     } catch (error) {
-        console.error('❌ Error connecting to PostgreSQL:', error);
-        process.exit(1);
+        console.error('❌ DB connection failed:', error);
     }
+
+    // 🔥 Always start server (VERY IMPORTANT)
+    app.listen(PORT, () => {
+        console.log(`🚀 Server running on port ${PORT}`);
+        console.log(`📍 Health check: /health`);
+    });
 };
 
 startServer();
