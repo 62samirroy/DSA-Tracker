@@ -13,3 +13,18 @@ export interface RoadmapWeek {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export interface CreateRoadmapWeek {
+    phase: string;
+    weekLabel: string;
+    title: string;
+    description: string;
+    hours: number;
+    hasMock: boolean;
+    color: string;
+    order: number;
+}
+
+export interface UpdateRoadmapWeek extends Partial<CreateRoadmapWeek> {
+    id: string;
+}

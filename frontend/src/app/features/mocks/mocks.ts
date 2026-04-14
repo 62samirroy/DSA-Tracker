@@ -43,10 +43,11 @@ import { MockSession } from '../../core/models/mock.model';
       </div>
 
       <!-- Form Modal -->
-      <div *ngIf="showForm()" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-lg p-6 max-w-md w-full">
+      <div *ngIf="showForm()" class="fixed inset-0 bg-black/50 flex items-center  justify-center z-50">
+        <div class="bg-white rounded-lg p-6 max-w-2xl  w-full">
           <h2 class="text-xl font-bold mb-4">{{ editingMock() ? 'Edit' : 'Add' }} Mock Interview</h2>
           <form [formGroup]="mockForm" (ngSubmit)="saveMock()" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label class="block text-sm font-medium mb-1">Date</label>
               <input type="date" formControlName="date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
@@ -81,8 +82,9 @@ import { MockSession } from '../../core/models/mock.model';
               <label class="block text-sm font-medium mb-1">Notes</label>
               <textarea formControlName="note" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500" rows="2"></textarea>
             </div>
+            </div>
             <div class="flex gap-2">
-              <button type="submit" class="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">Save</button>
+              <button type="submit" class="flex-1 bg-primary hover:bg-primary text-white font-medium py-2 px-4 rounded-lg transition-colors">Save</button>
               <button type="button" (click)="showForm.set(false)" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors">Cancel</button>
             </div>
           </form>
