@@ -7,7 +7,7 @@ export const initializeDB = async () => {
         console.log("Database connected!");
     }
 };
-
+ 
 export const db = {
     studyLog: AppDataSource.getRepository(StudyLog),
 };
