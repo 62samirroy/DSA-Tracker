@@ -1,41 +1,55 @@
-// backend/src/config/data-source.ts
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { User } from "../entities/User";
-import { StudyLog } from "../entities/StudyLog";
-import { MockSession } from "../entities/MockSession";
-import { Contest } from "../entities/Contest";
-import { RoadmapWeek } from "../entities/RoadmapWeek";
-import { PracticeSession } from "../entities/PracticeSession";
-import { QuestionCheck } from "../entities/QuestionCheck";
-import { PracticePlan } from "../entities/PracticePlan";
-import { PracticeTask } from "../entities/PracticeTask";
 import dotenv from 'dotenv';
 
-// Load environment variables
-dotenv.config();
+// Load .env file only in development
+if (process.env.NODE_ENV !== 'production') {
+    dotenv.config();
+}
 
-const isProduction = process.env.NODE_ENV === 'production';
+// Parse DATABASE_URL from Railway
+const databaseUrl = process.env.DATABASE_URL;
+let dbConfig = {
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT || '5432'),
+    username: process.env.DB_USERNAME || 'postgres',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'railway',
+};
 
-console.log(`Running in ${isProduction ? 'production' : 'development'} mode`);
+// If DATABASE_URL is provided (Railway does this), use it
+if (databaseUrl) {
+    console.log('Using DATABASE_URL for connection');
+    const url = new URL(databaseUrl);
+    dbConfig = {
+        host: url.hostname,
+        port: parseInt(url.port || '5432'),
+        username: url.username,
+        password: url.password,
+        database: url.pathname.slice(1),
+    };
+}
+
+console.log(`Attempting to connect to database at: ${dbConfig.host}:${dbConfig.port}`);
 
 export const AppDataSource = new DataSource({
     type: "postgres",
-    url: process.env.DATABASE_URL,
+    host: dbConfig.host,
+    port: dbConfig.port,
+    username: dbConfig.username,
+    password: dbConfig.password,
+    database: dbConfig.database,
+    synchronize: false, // Always false in production
+    logging: process.env.NODE_ENV === 'development',
+    entities: ["dist/entities/**/*.js"],
+    migrations: ["dist/migrations/**/*.js"],
+    subscribers: ["dist/subscribers/**/*.js"],
     ssl: {
-        rejectUnauthorized: false,
+        rejectUnauthorized: false, // Required for Railway
     },
-    entities: [
-        User,
-        StudyLog,
-        MockSession,
-        Contest,
-        RoadmapWeek,
-        PracticeSession,
-        QuestionCheck,
-        PracticePlan,
-        PracticeTask
-    ],
-    migrations: ["dist/migrations/*.js"],
-    synchronize: true, // Set to false in production and use migrations instead
+    extra: {
+        max: 20,
+        idleTimeoutMillis: 30000,
+        connectionTimeoutMillis: 10000,
+    },
 });
