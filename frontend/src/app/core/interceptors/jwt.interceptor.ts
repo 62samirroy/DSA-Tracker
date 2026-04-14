@@ -12,8 +12,7 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
     if (token) {
         authReq = req.clone({
             setHeaders: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json'
+                Authorization: `Bearer ${token}`
             }
         });
     }
@@ -21,7 +20,10 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
     return next(authReq).pipe(
         catchError((error) => {
             if (error.status === 401) {
-                authService.logout();
+                // Only logout if it's auth endpoint or confirmed invalid token
+                if (req.url.includes('/auth/me')) {
+                    authService.clearSession(); // softer than logout
+                }
             }
             return throwError(() => error);
         })

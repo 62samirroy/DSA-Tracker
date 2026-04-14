@@ -2,7 +2,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, tap, catchError, of, BehaviorSubject } from 'rxjs';
+import { Observable, tap, catchError, of, BehaviorSubject, retry } from 'rxjs';
 import { environment } from '../../../environments/environments';
 
 export interface User {
@@ -55,27 +55,27 @@ export class AuthService {
             return;
         }
 
-        // token exists, temporarily consider user authenticated
-        this.isAuthenticated.set(true);
-
+        // Restore from storage first (fast UX)
         if (storedUser) {
             try {
                 this.currentUser.set(JSON.parse(storedUser));
+                this.isAuthenticated.set(true);
             } catch {
                 localStorage.removeItem(this.userKey);
             }
         }
 
+        // Then verify in background (non-blocking)
         this.getMe().subscribe({
             next: (user) => {
                 this.currentUser.set(user);
                 this.isAuthenticated.set(true);
                 localStorage.setItem(this.userKey, JSON.stringify(user));
-                this.isLoading.set(false);
+                this.isLoading.set(false); // ✅ ADD HERE
             },
             error: () => {
-                this.clearSession();
-                this.isLoading.set(false);
+                console.warn('Token verification failed, keeping session');
+                this.isLoading.set(false); // ✅ ADD HERE
             }
         });
     }
@@ -91,7 +91,9 @@ export class AuthService {
     }
 
     getMe(): Observable<User> {
-        return this.http.get<User>(`${this.apiUrl}/me`);
+        return this.http.get<User>(`${this.apiUrl}/me`).pipe(
+            retry(1) // retry once before failing
+        );
     }
 
     logout(): void {
@@ -113,13 +115,14 @@ export class AuthService {
             localStorage.setItem(this.userKey, JSON.stringify(response.user));
             this.currentUser.set(response.user);
             this.isAuthenticated.set(true);
+            this.isLoading.set(false); // ✅ ADD THIS LINE
         }
     }
 
     private clearAuth(): void {
         this.clearSession();
     }
-    
+
     public clearSession(): void {
         localStorage.removeItem(this.tokenKey);
         localStorage.removeItem(this.userKey);
