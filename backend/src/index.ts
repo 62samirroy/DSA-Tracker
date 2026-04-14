@@ -21,12 +21,15 @@ const PORT = process.env.PORT || 3000;
 // CORS configuration
 const allowedOrigins = [
     'http://localhost:4200',
-    'https://your-frontend.vercel.app',
+    'https://dsa-tracker-five-swart.vercel.app',
     process.env.FRONTEND_URL
 ].filter(Boolean);
 
 app.use(cors({
-    origin: allowedOrigins,
+    origin: [
+        'http://localhost:4200',
+        'https://dsa-tracker-five-swart.vercel.app'
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
