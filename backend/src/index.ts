@@ -1,8 +1,10 @@
 // backend/src/index.ts
+import dotenv from 'dotenv';
+dotenv.config();
+
 import "reflect-metadata";
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import { AppDataSource } from './config/data-source';
 import authRoutes from './routes/auth.routes';
 import logsRoutes from './routes/logs.routes';
@@ -13,7 +15,6 @@ import practiceRoutes from './routes/ai-plan.routes';
 import aiPlanRoutes from './routes/ai-plan.routes';
 
 // Load environment variables
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -76,6 +77,10 @@ const startServer = async () => {
     try {
         await AppDataSource.initialize();
         console.log('✅ PostgreSQL connected successfully!');
+        console.log({
+            DB_URL: process.env.DATABASE_URL,
+            NODE_ENV: process.env.NODE_ENV
+        });
     } catch (error) {
         console.error('❌ DB connection failed:', error);
     }
