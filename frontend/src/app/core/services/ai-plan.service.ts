@@ -1,7 +1,7 @@
 // frontend/src/app/core/services/ai-plan.service.ts
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environments';
+import { environment } from '../../../environments/environment';
 
 export interface PracticeTask {
     id?: string;
