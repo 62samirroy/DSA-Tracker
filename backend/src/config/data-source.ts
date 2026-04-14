@@ -21,10 +21,10 @@ console.log(`Running in ${isProduction ? 'production' : 'development'} mode`);
 
 export const AppDataSource = new DataSource({
     type: "postgres",
-    ...(isProduction
+    ...(process.env.DATABASE_URL
         ? {
             url: process.env.DATABASE_URL,
-            ssl: { rejectUnauthorized: false }  // Required for Railway
+            ssl: { rejectUnauthorized: false }
         }
         : {
             host: process.env.DB_HOST || "localhost",
@@ -34,10 +34,7 @@ export const AppDataSource = new DataSource({
             database: process.env.DB_NAME || "dsa_tracker",
         }
     ),
-    synchronize: false,  // Never true in production
-    logging: !isProduction,
+    synchronize: false,
+    logging: true,
     entities: [User, StudyLog, MockSession, Contest, RoadmapWeek, PracticeSession, QuestionCheck, PracticePlan, PracticeTask],
-    migrations: ["src/migrations/*.ts"],
-    subscribers: [],
-    ...(isProduction && { ssl: { rejectUnauthorized: false } })
 });
