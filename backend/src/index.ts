@@ -86,47 +86,19 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 
 // Initialize database and start server
 const startServer = async () => {
-    let retries = 5;
-    let connected = false;
-
-    while (retries > 0 && !connected) {
-        try {
+    try {
+        if (!AppDataSource.isInitialized) {
             await AppDataSource.initialize();
-            console.log('✅ PostgreSQL connected successfully!');
-            console.log(`📊 Database: ${AppDataSource.options.database}`);
-            // console.log(`🔗 Host: ${AppDataSource.options.host}:${AppDataSource.options.port}`);
-            connected = true;
-        } catch (error) {
-            console.error(`❌ DB connection failed (${retries} attempts left):`, error.message);
-            retries--;
-            if (retries > 0) {
-                console.log('Waiting 5 seconds before retry...');
-                await new Promise(resolve => setTimeout(resolve, 5000));
-            } else {
-                console.error('❌ Failed to connect to database after multiple attempts');
-                // Don't throw error, just log it - server will still start
-            }
         }
+
+        console.log("✅ DB connected");
+
+    } catch (error) {
+        console.error("❌ DB failed:", error);
     }
 
-    // 🔥 Always start server (VERY IMPORTANT)
-    const server = app.listen(PORT, () => {
-        console.log(`🚀 Server running on port ${PORT}`);
-        console.log(`📍 Health check: /health`);
-        console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
-    });
-
-    // Graceful shutdown
-    process.on('SIGTERM', () => {
-        console.log('SIGTERM signal received: closing HTTP server');
-        server.close(async () => {
-            console.log('HTTP server closed');
-            if (AppDataSource.isInitialized) {
-                await AppDataSource.destroy();
-                console.log('Database connection closed');
-            }
-            process.exit(0);
-        });
+    app.listen(PORT, () => {
+        console.log(`🚀 Server running on ${PORT}`);
     });
 };
 
