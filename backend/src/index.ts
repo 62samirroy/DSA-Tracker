@@ -19,29 +19,39 @@ const PORT = process.env.PORT || 3000;
 
 // CORS configuration
 const allowedOrigins = [
-    'http://localhost:4200',
-    'https://dsa-tracker-five-swart.vercel.app',
-    process.env.FRONTEND_URL
-].filter(Boolean);
+    process.env.FRONTEND_URL, // Production frontend
+    "http://localhost:3000",
+    "http://localhost:5173",
+];
 
-app.use(cors({
-    origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps, curl, etc)
-        if (!origin) return callback(null, true);
+// Configure CORS
+app.use(
+    cors({
+        origin: (origin, callback) => {
+            // Allow requests with no origin (e.g., Postman, mobile apps)
+            if (!origin) return callback(null, true);
 
-        if (allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            console.log('Blocked origin:', origin);
-            callback(null, false);
-        }
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
-}));
+            // Allow predefined origins
+            if (allowedOrigins.includes(origin)) {
+                return callback(null, true);
+            }
+
+            // Allow all Vercel preview deployments
+            if (origin.endsWith(".vercel.app")) {
+                return callback(null, true);
+            }
+
+            console.log(`Blocked origin: ${origin}`);
+            return callback(new Error("Not allowed by CORS"));
+        },
+        credentials: true,
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+    })
+);
 
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
 
 // Request logging middleware (optional but helpful)
