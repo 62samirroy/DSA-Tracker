@@ -8,6 +8,7 @@ export const initializeDB = async () => {
     }
 };
  
+
 export const db = {
     studyLog: AppDataSource.getRepository(StudyLog),
 };
