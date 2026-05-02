@@ -99,7 +99,6 @@ const startServer = async () => {
     let retries = 5;
     let connected = false;
 
-    
     while (retries > 0 && !connected) {
         try {
             await AppDataSource.initialize();

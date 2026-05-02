@@ -17,7 +17,7 @@ console.log("Using DATABASE_URL");
 export const AppDataSource = new DataSource({
     type: "postgres",
     url: process.env.DATABASE_URL,
-    synchronize: false,
+    synchronize: true,
     logging: false,
     entities: ["dist/entities/**/*.js"],
     migrations: ["dist/migrations/**/*.js"],
